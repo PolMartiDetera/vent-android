@@ -38,6 +38,21 @@ private val clockFormatter: DateTimeFormatter =
 fun formatClock(epochMillis: Long): String =
     Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault()).format(clockFormatter)
 
+private val dayLabelFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("EEE d MMM", Locale.getDefault())
+
+/** "Today" / "Tomorrow" / short date for forecast-day rows. */
+fun formatDayLabel(epochMillis: Long, nowEpochMillis: Long = System.currentTimeMillis()): String {
+    val zone = ZoneId.systemDefault()
+    val date = Instant.ofEpochMilli(epochMillis).atZone(zone).toLocalDate()
+    val today = Instant.ofEpochMilli(nowEpochMillis).atZone(zone).toLocalDate()
+    return when (date) {
+        today -> "Today"
+        today.plusDays(1) -> "Tomorrow"
+        else -> date.format(dayLabelFormatter)
+    }
+}
+
 /** Unicode wind-from-direction arrow (north up): NE wind shows a northeast-pointing arrow. */
 fun windArrow(directionDeg: Int): String {
     val normalized = ((directionDeg % 360) + 360) % 360

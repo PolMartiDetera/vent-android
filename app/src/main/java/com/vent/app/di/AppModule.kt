@@ -17,6 +17,8 @@ import com.vent.app.data.settings.settingsDataStore
 import com.vent.app.domain.alerts.ThresholdAlertEngine
 import com.vent.app.domain.brief.DayBriefGenerator
 import com.vent.app.domain.brief.FishingConditionsGenerator
+import com.vent.app.haptic.HapticController
+import com.vent.app.ui.marine.MarineViewModel
 import com.vent.app.ui.now.NowViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -60,6 +62,9 @@ val appModule = module {
     // --- Notifications -------------------------------------------------------------
     single { NotificationHelper(androidContext()) }
 
+    // --- Haptics --------------------------------------------------------------------
+    single { HapticController(androidContext(), get()) }
+
     // --- Domain services -----------------------------------------------------------
     single { DayBriefGenerator() }
     single { FishingConditionsGenerator() }
@@ -67,4 +72,5 @@ val appModule = module {
 
     // --- ViewModels (added per-screen as screens land) --------------------------------
     viewModel { NowViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MarineViewModel(get(), get(), get()) }
 }
