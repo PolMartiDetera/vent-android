@@ -17,12 +17,14 @@ import com.vent.app.data.settings.settingsDataStore
 import com.vent.app.domain.alerts.ThresholdAlertEngine
 import com.vent.app.domain.brief.DayBriefGenerator
 import com.vent.app.domain.brief.FishingConditionsGenerator
+import com.vent.app.ui.now.NowViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -64,4 +66,5 @@ val appModule = module {
     single { ThresholdAlertEngine() }
 
     // --- ViewModels (added per-screen as screens land) --------------------------------
+    viewModel { NowViewModel(get(), get(), get(), get(), get()) }
 }

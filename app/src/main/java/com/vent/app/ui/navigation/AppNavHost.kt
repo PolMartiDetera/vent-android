@@ -10,13 +10,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.vent.app.ui.now.NowScreen
 
 @Composable
 fun AppNavHost() {
@@ -51,8 +54,22 @@ fun AppNavHost() {
             startDestination = Destination.NOW.routeFor(),
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(Destination.NOW.routeFor()) { PlaceholderScreen("Now") }
-            composable(Destination.MARINE.routeFor("")) { PlaceholderScreen("Marine") }
+            composable(Destination.NOW.routeFor()) {
+                NowScreen(
+                    onOpenCompass = {
+                        navController.navigate(Destination.MARINE.routeFor("compass"))
+                    },
+                )
+            }
+            composable(
+                route = Destination.MARINE.route,
+                arguments = listOf(
+                    navArgument("focus") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                ),
+            ) { PlaceholderScreen("Marine") }
             composable(Destination.MAP.routeFor()) { PlaceholderScreen("Map") }
             composable(Destination.SETTINGS.routeFor()) { PlaceholderScreen("Settings") }
         }
