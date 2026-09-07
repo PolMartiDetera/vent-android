@@ -68,6 +68,7 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.2.0")
 
     implementation("com.patrykandpatrick.vico:compose-m3:3.3.1")
+    implementation("org.maplibre.gl:android-sdk:13.6.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")
