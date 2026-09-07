@@ -1,5 +1,6 @@
 package com.vent.app.data.provider
 
+import com.vent.app.data.model.DailyInfo
 import com.vent.app.data.model.ForecastHour
 import com.vent.app.data.model.TideData
 
@@ -13,6 +14,9 @@ interface WindProvider {
 
     /** Current conditions snapshot. */
     suspend fun current(lat: Double, lon: Double, time: Long): ForecastHour
+
+    /** Sun/moon schedule for the current day. */
+    suspend fun daily(lat: Double, lon: Double): DailyInfo
 }
 
 interface WaveProvider {

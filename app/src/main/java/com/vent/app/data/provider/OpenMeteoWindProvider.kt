@@ -1,5 +1,6 @@
 package com.vent.app.data.provider
 
+import com.vent.app.data.model.DailyInfo
 import com.vent.app.data.model.ForecastHour
 import com.vent.app.data.model.WindRose
 import com.vent.app.data.model.kmhToKnots
@@ -52,4 +53,24 @@ class OpenMeteoWindProvider(
             cloudCoverPct = c.cloudCover,
         )
     }
+
+    override suspend fun daily(lat: Double, lon: Double): DailyInfo {
+        val om = client.weather(lat, lon)
+        val offset = om.utcOffsetSeconds
+        val d = om.daily
+        return DailyInfo(
+            sunrise = firstEpoch(d.sunrise, offset),
+            sunset = firstEpoch(d.sunset, offset),
+            // moonrise/moonset are absent for days when the moon never rises/sets
+            moonrise = firstNonEmpty(d.moonrise, offset),
+            moonset = firstNonEmpty(d.moonset, offset),
+            moonPhase = d.moonPhase.firstOrNull() ?: 0.0,
+        )
+    }
+
+    private fun firstEpoch(list: List<String>, offset: Int): Long =
+        list.firstOrNull()?.let { OmTime.toEpochMillis(it, offset) } ?: 0L
+
+    private fun firstNonEmpty(list: List<String>, offset: Int): Long =
+        list.firstOrNull { it.isNotEmpty() }?.let { OmTime.toEpochMillis(it, offset) } ?: 0L
 }
