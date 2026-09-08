@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.vent.app.ui.marine.MarineScreen
 import com.vent.app.ui.now.NowScreen
 
+
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
@@ -68,14 +69,14 @@ fun AppNavHost() {
                     navArgument("focus") {
                         type = NavType.StringType
                         defaultValue = ""
-                    },
+                    }
                 ),
             ) { backStackEntry ->
                 val focus = backStackEntry.arguments?.getString("focus").orEmpty()
                 MarineScreen(focus = focus)
             }
             composable(Destination.MAP.routeFor()) { PlaceholderScreen("Map") }
-            composable(Destination.SETTINGS.routeFor()) { PlaceholderScreen("Settings") }
+            composable(Destination.SETTINGS.routeFor()) { Text(text = "Settings") }
         }
     }
 }
